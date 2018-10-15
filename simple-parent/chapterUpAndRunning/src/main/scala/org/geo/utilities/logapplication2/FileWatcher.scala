@@ -5,7 +5,7 @@ import akka.actor.SupervisorStrategy.{ Stop, Resume, Restart, Escalate }
 import java.io.File
 import java.net.URI
 
-
+import org.geo.utilities.Geoutils._
 /**
  * @author george
  * FileWatcher actor is supervised by the LogProcessingSupervisor.
@@ -25,7 +25,7 @@ class FileWatcher(source: String, databaseUrls: Vector[String])
   import org.geo.utilities.exceptions.CustomExceptions._
   import FileWatcher._
 
-  log.info(myName + " Constructor:source=%s\ndburls=%s".format(source,databaseUrls))
+  emit(myName + " Constructor:source=%s\ndburls=%s".format(source,databaseUrls),true)
   /**
    * This functionality must register the source in some TDB way.
    */
@@ -39,7 +39,9 @@ class FileWatcher(source: String, databaseUrls: Vector[String])
    * Not sure how that will work out yet.
    */
   override def supervisorStrategy = OneForOneStrategy() {
-    case _: CorruptedFileException => Resume
+    case _: CorruptedFileException => 
+      emit(myName + " supervisor Resuming ",true)
+      Resume
   }
 
   /** start up the child LogProcessor **/
@@ -56,13 +58,13 @@ class FileWatcher(source: String, databaseUrls: Vector[String])
   def receive = {
     
     case NewFile(file, _) =>
-      log.info(myName + " NewFile(%s,_)".format(file))
+      emit(myName + " NewFile(%s,_)".format(file),true)
       logProcessor ! LogProcessor.LogFile(file)
     case SourceAbandoned(uri) if uri == source =>
-      log.info(myName + "%s abandoned, stopping the file watcher.".format(uri))
+      emit(myName + "%s abandoned, stopping the file watcher.".format(uri),true)
       self ! PoisonPill
     case Terminated(`logProcessor`) =>
-      log.info(myName + " Log processor terminated, stopping file watcher.")
+      emit(myName + " Log processor terminated, stopping file watcher.",true)
       self ! PoisonPill
   }
 
@@ -85,11 +87,11 @@ trait FileWatchingAbilities extends ActorLogging {
   import org.geo.utilities.Geoutils._
   import FileWatcher._
   def register(uri: String): File = {
-  log.info ( "registering %s".format(uri))
+  emit ( "FileWatchingAbilities --> registering %s".format(uri),true)
   val uriF = new URI(uri);
-  log.info("uriF=%s".format(uriF))
+  emit("FileWatchingAbilities --> uriF=%s".format(uriF),true)
   val f = new File(uriF);
-  log.info( "created File Object:%s".format(f))
+  emit( "FileWatchingAbilities --> created File Object:%s".format(f),true)
   // val f =  getFile(uri)
   f
   }

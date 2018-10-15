@@ -14,6 +14,11 @@
 		<encoding>UTF-8</encoding>
 		<scala.version>2.12.3</scala.version>
 		<akka.version>2.5.16</akka.version>
+		<scala-logging.version>3.5.0</scala-logging.version>
+
+		<scalaMongoAsyncDriver.version>3.8.2</scalaMongoAsyncDriver.version>
+		<scalaMongoBson.version>2.4.2</scalaMongoBson.version>
+		<scalaMongoDriver.version>2.4.0</scalaMongoDriver.version>
 	</properties>
 
 	<modules>
@@ -26,7 +31,28 @@
 	</modules>
 
 	<dependencies>
-		<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
+
+		<!-- ############################### Scala Libraries ####################################### -->
+		<dependency>
+			<groupId>org.scala-lang</groupId>
+			<artifactId>scala-library</artifactId>
+			<version>${scala.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>com.typesafe.scala-logging</groupId>
+			<artifactId>scala-logging_2.12</artifactId>
+			<version>${scala-logging.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.scalatest</groupId>
+			<artifactId>scalatest_2.12</artifactId>
+			<version>3.2.0-SNAP4</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- ########################## LOGGING #################################### -->
+
 		<dependency>
 			<groupId>ch.qos.logback</groupId>
 			<artifactId>logback-classic</artifactId>
@@ -34,33 +60,38 @@
 			<scope>test</scope>
 		</dependency>
 
+		<dependency><!--  -->
+			<groupId>org.slf4j</groupId>
+			<artifactId>slf4j-simple</artifactId>
+			<version>1.7.25</version>
+			<scope>test</scope>
+		</dependency>
+		<!-- ############################## AKKA ########################################### -->
+
 		<dependency>
 			<groupId>com.typesafe.akka</groupId>
 			<artifactId>akka-actor_2.12</artifactId>
 			<version>${akka.version}</version>
 		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.typesafe.akka/akka-http-core -->
+
 		<dependency>
 			<groupId>com.typesafe.akka</groupId>
 			<artifactId>akka-http-core_2.12</artifactId>
 			<version>10.1.5</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/com.typesafe.akka/akka-http -->
 		<dependency>
 			<groupId>com.typesafe.akka</groupId>
 			<artifactId>akka-http_2.12</artifactId>
 			<version>10.1.5</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/com.typesafe.akka/akka-stream -->
 		<dependency>
 			<groupId>com.typesafe.akka</groupId>
 			<artifactId>akka-stream_2.12</artifactId>
 			<version>2.5.16</version>
 		</dependency>
 
-		<!-- https://mvnrepository.com/artifact/com.typesafe.akka/akka-http-spray-json -->
 		<dependency>
 			<groupId>com.typesafe.akka</groupId>
 			<artifactId>akka-http-spray-json_2.12</artifactId>
@@ -68,74 +99,50 @@
 		</dependency>
 
 
-		<!-- https://mvnrepository.com/artifact/org.scala-lang/scala-library -->
 		<dependency>
-			<groupId>org.scala-lang</groupId>
-			<artifactId>scala-library</artifactId>
-			<version>${scala.version}</version>
+			<groupId>com.typesafe.akka</groupId>
+			<artifactId>akka-testkit_2.12</artifactId>
+			<version>${akka.version}</version>
+			<!-- <scope>test</scope> -->
 		</dependency>
-		<!-- Test -->
+
+		<dependency>
+			<groupId>com.typesafe.akka</groupId>
+			<artifactId>akka-slf4j_2.12</artifactId>
+			<version>2.5.16</version>
+		</dependency>
+
+		<!-- #################### MONGO DEPENDENCIES ####################################### -->
+		<dependency>
+			<groupId>org.mongodb.scala</groupId>
+			<artifactId>mongo-scala-driver_2.12</artifactId>
+			<version>${scalaMongoDriver.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mongodb</groupId>
+			<artifactId>mongodb-driver-async</artifactId>
+			<version>${scalaMongoAsyncDriver.version}</version>
+		</dependency>
+
+		<dependency>
+			<groupId>org.mongodb.scala</groupId>
+			<artifactId>mongo-scala-bson_2.12</artifactId>
+			<version>${scalaMongoBson.version}</version>
+		</dependency>
+
+	
+	<!-- 
+	############################# OTHER DEPENDENCIES ############################
+	 -->
+	 
 		<dependency>
 			<groupId>junit</groupId>
 			<artifactId>junit</artifactId>
 			<version>4.11</version>
 			<scope>test</scope>
 		</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.specs2/specs2-core_2.11 -->
-<!-- 		<dependency>
-			<groupId>org.specs2</groupId>
-			<artifactId>specs2-core_2.11</artifactId>
-			<version>4.0.3-83f81a8-20180227163433</version>
-			<scope>test</scope>
-		</dependency> -->
-
-		<!-- https://mvnrepository.com/artifact/org.scalatest/scalatest_2.11 -->
-		<dependency>
-    <groupId>org.scalatest</groupId>
-    <artifactId>scalatest_2.12</artifactId>
-    <version>3.2.0-SNAP4</version>
-    <scope>test</scope>
-</dependency>
-
-		<!-- https://mvnrepository.com/artifact/org.scalacheck/scalacheck -->
-
-<!-- 		<dependency>
-			<groupId>org.scalacheck</groupId>
-			<artifactId>scalacheck_2.11</artifactId>
-			<version>1.14.0</version>
-			<scope>test</scope>
-		</dependency> -->
-
-
-		<!-- https://mvnrepository.com/artifact/com.typesafe.akka/akka-testkit_2.11 -->
-		<dependency>
-			<groupId>com.typesafe.akka</groupId>
-			<artifactId>akka-testkit_2.12</artifactId>
-			<version>${akka.version}</version>
-<!-- 			<scope>test</scope>
- -->		</dependency>
-		<!-- https://mvnrepository.com/artifact/ch.qos.logback/logback-classic -->
-		<dependency>
-			<groupId>ch.qos.logback</groupId>
-			<artifactId>logback-classic</artifactId>
-			<version>1.2.3</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/com.typesafe.akka/akka-slf4j -->
-		<dependency>
-			<groupId>com.typesafe.akka</groupId>
-			<artifactId>akka-slf4j_2.12</artifactId>
-			<version>2.5.16</version>
-		</dependency>
-		<!-- https://mvnrepository.com/artifact/org.slf4j/slf4j-simple -->
-		<dependency>
-			<groupId>org.slf4j</groupId>
-			<artifactId>slf4j-simple</artifactId>
-			<version>1.7.25</version>
-			<scope>test</scope>
-		</dependency>
-
-
+		
 	</dependencies>
 
 	<build>

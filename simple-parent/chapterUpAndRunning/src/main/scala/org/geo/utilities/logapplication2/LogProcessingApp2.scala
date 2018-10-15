@@ -1,40 +1,21 @@
 package org.geo.utilities.logapplication2
-import akka.actor.{ ActorSystem }
+import akka.actor.ActorSystem
+import org.geo.utilities.Geoutils._
 object LogProcessingApp2 {
  val sources = Vector(
- "file:///C:/test/allxa"
-, "file:///C:/test/testHtml.html"
-//,"file:///C:/test/xae"
-//,"file:///C:/test/xaf"
-//,"file://C:/test/xag"
-//,"file://C:/test/xah"
-//,"file://C:/test/xai"
-//,"file://C:/test/xaj"
-//,"file://C:/test/xak"
-//,"file://C:/test/xal"
-//,"file://C:/test/xam"
-//,"file://C:/test/xan"
-//,"file://C:/test/xao"
-//,"file://C:/test/xap"
-//,"file://C:/test/xaq"
-//,"file://C:/test/xar"
-//,"file://C:/test/xas"
-//,"file://C:/test/xat"
-//,"file://C:/test/xau"
-//,"file://C:/test/xav"
-//,"file://C:/test/xaw"
-//,"file://C:/test/xax"
-//,"file://C:/test/xay"
-//,"file://C:/test/xaz"
+ "file:///C:/test/log10.txt"
+, "file:///C:/test/log20.txt"
+
 )
   val system = ActorSystem("logprocessing")
 
   val databaseUrls = Vector(
-    "http://mydatabase1",
-    "http://mydatabase2",
-    "http://mydatabase3")
+    "mongodb://localhost:27017",
+    "mongodb://localhost:27017",
+    "mongodb://localhost:27017")
     
   def main(args: Array[String]) {
+   emit("starting Log Processor System",true)
     /** 
      *  start the LogProcessingsupervisor actor. This simply passes
      *  new LogProcessingSupervisor(sources,databaseUrls) to Props

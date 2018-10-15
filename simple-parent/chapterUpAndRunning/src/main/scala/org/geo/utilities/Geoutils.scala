@@ -1,9 +1,13 @@
 package org.geo.utilities
 import java.io._
 import java.net._
-
 import scala.collection.mutable.ArrayBuffer
+
+import com.typesafe.sslconfig.util.LoggerFactory
+import org.slf4j.LoggerFactory
+
 object Geoutils {
+    val logger = LoggerFactory.getLogger("Geoutils")
 
   def readFile(uri: String): Unit = {
     // val url = new URL("file:///Users/al/Desktop/50-Shades-Quotes.txt")
@@ -23,5 +27,11 @@ object Geoutils {
   
   def getFile(uri: String): File = {
     new File(uri)
+  }
+  
+  def emit(message: String, show: Boolean):Unit = {
+    if ( show ) {
+      logger.info(message)
+    }
   }
 }

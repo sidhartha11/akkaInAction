@@ -2,6 +2,7 @@ package org.geo.utilities.logapplication2
 
 import akka.actor.{Props,Actor,ActorLogging,ActorRef,Terminated,AllForOneStrategy}
 import akka.actor.SupervisorStrategy.{ Stop, Resume, Restart, Escalate }
+import org.geo.utilities.Geoutils._
 
 object LogProcessingSupervisor {
   /**
@@ -35,16 +36,17 @@ class LogProcessingSupervisor(
    */
   var fileWatchers: Vector[ActorRef] = sources.map {
     source => 
-    log.info(myName + " processing %s".format(source))
+    emit(myName + " processing file %s".format(source),true)
     /**
      * each FileWatcher actor is instantiated with a source and vector of 
      * database Urls. This FileWatcher actor will be a child of this actor 
      * since it is using the context to create the actor. 
      */
+    emit(myName + " starting actor  ", true)
     val fileWatcher = context.actorOf(
         Props(new FileWatcher(source,databaseUrls))
         )
-        log.info(myName + " watching " + fileWatcher)
+    emit(myName + " started actor  " + fileWatcher, true)    
         context.watch(fileWatcher)
         fileWatcher
   }
@@ -60,15 +62,15 @@ class LogProcessingSupervisor(
    */
   override def supervisorStrategy = AllForOneStrategy() {
     case _: DiskError => 
-      log.info(myName + " DiskError matched")
+      emit(myName + " DiskError matched", true )
       Stop
   }
   def receive = {
       case Terminated(fileWatcher) => 
-        log.info(myName + " Terminated message " + fileWatcher.toString)
+        emit(myName + " Terminated message " + fileWatcher.toString,true)
         fileWatchers = fileWatchers.filterNot(_ == fileWatcher )
         if (fileWatchers.isEmpty) {
-          log.info("shutting down, all file watchers have failed.")
+          emit("shutting down, all file watchers have failed.",true)
           context.system.terminate()
         }
     }

@@ -1,14 +1,14 @@
-FILES='chapterUpAndRunning \
+FILES="chapterUpAndRunning \
 messageModule \
 otherModule \
 scratchModule \
 serverModule \
-utilityModule' 
+utilityModule" 
 for file in $FILES
 do
 echo ":$file:"
 cd ./$file
 pwd
-#rm -rf ./.classpath ./.project ./.settings
+rm -rf ./.classpath ./.project ./.settings
 cd ..
 done

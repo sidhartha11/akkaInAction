@@ -9,6 +9,6 @@ do
 echo ":$file:"
 cd ./$file
 pwd
-rm -rf ./.classpath ./.project ./.settings
+rm -rf ./.classpath ./.project ./.settings ./target
 cd ..
 done

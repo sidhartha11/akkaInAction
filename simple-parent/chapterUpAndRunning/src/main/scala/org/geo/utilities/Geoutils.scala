@@ -34,4 +34,7 @@ object Geoutils {
       logger.info(message)
     }
   }
+    def emit(message: String):Unit = {
+      emit(message,true)
+  }
 }

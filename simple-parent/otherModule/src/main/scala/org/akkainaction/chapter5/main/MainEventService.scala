@@ -11,12 +11,14 @@ import org.apache.http.util.EntityUtils
 import com.google.gson.reflect.TypeToken
 
 import org.akkainaction.chapter5.utilities.Geoutils._
-import org.akkainaction.chapter5.entities._
+import org.akkainaction.chapter5.entities.ObjectCaseEntities._
 import java.lang.reflect.Type
 
 /** needed to execute the Future Call and the Await Call **/
 import scala.concurrent.{Await, Future}
 import scala.concurrent.duration._
+
+import java.util.{Date}
 
 /** The Default Execution Context **/
 import scala.concurrent.ExecutionContext.Implicits.global
@@ -30,7 +32,9 @@ object MainEventService extends App {
   def urlUpdate = "http://localhost:8080/api/updateevent"
 
   /** callEventService **/
-  def callCreateEventService(event: String): Long = {
+  def callCreateEventService(event: String
+      ,location: String
+      , timeStamp: String): Long = {
 
     /**
      * Create One Entity of type EventRequest
@@ -65,7 +69,7 @@ object MainEventService extends App {
 
     /** create one EventRequest **/
     val token: Type = new TypeToken[EventResponse]() {}.getType
-    val eventResponse = EventResponse(0, event)
+    val eventResponse = EventResponse(0, event,location,timeStamp)
     val o = createOneEntityG[EventResponse](eventResponse, token, urlCreate)
     emit("o = %s".format(o))
     o
@@ -73,7 +77,7 @@ object MainEventService extends App {
 
   def createMultipleEventsToTestWith = {
     for (i <- (1 to 10)) {
-      val response: Long = callCreateEventService("Event-" + i + ":id-" + i)
+      val response: Long = callCreateEventService("Event-" + i + ":id-" + i,"location-" + i , dateToString(new Date))
       emit("created event:%d".format(response))
     }
   }
@@ -81,7 +85,7 @@ object MainEventService extends App {
   def callEventService(request: EventRequest): EventResponse = {
     val url = urlGet + "/" 
     emit("callEventService:" + url)
-    val eventResponse = getRequestWithRsource[EventResponse](request.id,url)
+    val eventResponse = getRequestWithResource[EventResponse](request.id,url)
     emit("got " + eventResponse)
     eventResponse
   }
@@ -118,8 +122,8 @@ object MainEventService extends App {
     Thread.sleep(1000)
   }
   
-  // createMultipleEventsToTestWith
+  createMultipleEventsToTestWith
   // doSynchronousCall(13)
-  doAsynchrounousCall(15)
+  // doAsynchrounousCall(15)
 
 }

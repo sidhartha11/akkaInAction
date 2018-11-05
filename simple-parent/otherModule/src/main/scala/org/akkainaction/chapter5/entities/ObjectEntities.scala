@@ -6,6 +6,7 @@ case class Users(id: Long, username: String, password: String, enabled: Boolean)
 trait RequestUser {
   
 }
+
 class Gusers extends RequestUser {
   var id: Long = _
   var username: String = _ 

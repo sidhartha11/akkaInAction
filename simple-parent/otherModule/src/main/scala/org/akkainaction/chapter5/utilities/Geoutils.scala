@@ -13,6 +13,9 @@ import org.apache.http.client.methods.HttpGet
 import scala.reflect.ClassTag
 import org.apache.http.client.methods.CloseableHttpResponse
 import org.apache.http.HttpHeaders
+/** needed to execute the Future Call and the Await Call **/
+import scala.concurrent.{ Await, Future }
+import scala.concurrent.duration._
 
 object Geoutils {
   val logger = LoggerFactory.getLogger("Geoutils")
@@ -30,14 +33,14 @@ object Geoutils {
   require(resource != null, "resource is null")
   var exception: Throwable = null
   try {
-    println("calling resource block")
+    emit("calling resource block")
     f(resource)
   } catch {
     case NonFatal(e) =>
       exception = e
       throw e
   } finally {
-    println("calling closeAndAddSuppressed")
+    emit("calling closeAndAddSuppressed")
     closeAndAddSuppressed(exception, resource)
   }
 }
@@ -59,12 +62,12 @@ object Geoutils {
       val content: String = EntityUtils.toString(httpResponse.getEntity)
       val statusCode: Int = httpResponse.getStatusLine.getStatusCode
       val users: B = new Gson().fromJson(content, tag.runtimeClass)
-      println("statusCode = " + statusCode)
-      println("converted Users=" + users)
+      emit("statusCode = " + statusCode)
+      emit("converted Users=" + users)
       users
     } catch {
       case e: IOException => {
-        println("<<<<Exception caught:" + e)
+        emit("<<<<Exception caught:" + e)
         throw e
       }
     } finally {
@@ -76,9 +79,9 @@ object Geoutils {
    * Example using withResources 
    */
   @throws(classOf[Exception])
-  def getRequestWithRsource[B](id: Long, url: String = "http://localhost:8080/api/users/")(implicit tag: ClassTag[B]): B = {
+  def getRequestWithResource[B](id: Long, url: String = "http://localhost:8080/api/users/")(implicit tag: ClassTag[B]): B = {
   // def withResources[T <: AutoCloseable, V](r: => T)(f: T => V): V = {
-    emit(">>getRequestWithRsource:%d,%s".format(id,url))
+    emit(">>getRequestWithResource:%d,%s".format(id,url))
     val httpClient: CloseableHttpClient = HttpClientBuilder.create().build()
 
     withResources[CloseableHttpClient,B](httpClient){httpclient => 
@@ -90,10 +93,10 @@ object Geoutils {
       val content: String = EntityUtils.toString(e)
       emit("content=" + content)
       val statusCode: Int = httpResponse.getStatusLine.getStatusCode
-      val users: B = new Gson().fromJson(content, tag.runtimeClass)
-      println("statusCode = " + statusCode)
-      println("converted Users=" + users)
-      users
+      val response: B = new Gson().fromJson(content, tag.runtimeClass)
+      emit("statusCode = " + statusCode)
+      emit("converted Response=" + response)
+      response
     }
   }
   /**
@@ -112,8 +115,8 @@ object Geoutils {
       val content: String = EntityUtils.toString(httpResponse.getEntity)
       val statusCode: Int = httpResponse.getStatusLine.getStatusCode
       val users: B = new Gson().fromJson(content, tag.runtimeClass)
-      println("statusCode = " + statusCode)
-      println("converted Users=" + users)
+      emit("statusCode = " + statusCode)
+      emit("converted Users=" + users)
       users
     }
   }
@@ -134,8 +137,8 @@ object Geoutils {
       val content: String = EntityUtils.toString(httpResponse.getEntity)
       val statusCode: Int = httpResponse.getStatusLine.getStatusCode
       val users: B = new Gson().fromJson(content, tag.runtimeClass)
-      println("statusCode = " + statusCode)
-      println("converted Users=" + users)
+      emit("statusCode = " + statusCode)
+      emit("converted Users=" + users)
       users
     }
   }
@@ -143,14 +146,14 @@ private def closeAndAddSuppressed(e: Throwable,
                                   resource: AutoCloseable): Unit = {
   if (e != null) {
     try {
-      println("1 closing resource")
+      emit("1 closing resource")
       resource.close()
     } catch {
       case NonFatal(suppressed) =>
         e.addSuppressed(suppressed)
     }
   } else {
-    println("2 closing resource")
+    emit("2 closing resource")
     resource.close()
   }
 }
@@ -167,5 +170,19 @@ private def closeAndAddSuppressed(e: Throwable,
   }
   def emit(message: String): Unit = {
     emit(message, true)
+  }
+  
+  def dateToString(date: java.util.Date): String = {
+    val format = new java.text.SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS")
+    format.format(date)
+  }
+  
+  def waitForCompletion(future: Future[Any]): Unit = {
+    implicit val baseTime = System.currentTimeMillis
+    emit("calling Await on the future ")
+    val result = Await.result(future, 10 second)
+    emit("result=%s".format(result))
+    Thread.sleep(1000)
+    
   }
 }

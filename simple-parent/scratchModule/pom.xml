@@ -9,11 +9,11 @@
     <artifactId>simple-parent</artifactId>
     <version>0.8-SNAPSHOT</version>
   </parent>
-  <artifactId>scratchModule</artifactId>
+  <artifactId>chapter-remoting</artifactId>
   
   <packaging>jar</packaging>
 
-  <name>scratchModule</name>
+  <name>chapter-futures</name>
   <build>
     <sourceDirectory>src/main/scala</sourceDirectory>
     <testSourceDirectory>src/test/scala</testSourceDirectory>

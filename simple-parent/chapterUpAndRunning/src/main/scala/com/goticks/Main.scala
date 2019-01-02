@@ -2,6 +2,9 @@ package com.goticks
 
 import scala.concurrent.Future
 
+import scala.util.{Failure, Success}
+
+
 import akka.actor.ActorSystem
 import akka.event.Logging
 import akka.http.scaladsl.Http
@@ -44,8 +47,10 @@ object Main extends App
   val log =  Logging(system.eventStream, "go-ticks")
   bindingFuture.map { serverBinding =>
     log.info(s"RestApi bound to ${serverBinding.localAddress} ")
-  }.onFailure { 
-    case ex: Exception =>
+  }.onComplete { 
+    case Success(value) => value
+    case Failure(ex) => ex.printStackTrace
+ //   case ex: Exception =>
       log.error(ex, "Failed to bind to {}:{}!", host, port)
       system.terminate()
   }

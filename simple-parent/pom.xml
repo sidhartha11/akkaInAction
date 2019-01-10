@@ -32,6 +32,7 @@
 		<module>chapter-remoting</module>
 		<module>chapter-conf-deploy</module>
 		<module>chapter-structure</module>
+		<module>chapter-routing</module>
 	</modules>
 
 	<dependencies>

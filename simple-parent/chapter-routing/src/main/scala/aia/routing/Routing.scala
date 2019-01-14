@@ -40,8 +40,8 @@ class GetLicense(pipe: ActorRef, initialServiceTime: FiniteDuration = 0 millis)
         processedBy = Some(id)
         )
     }
-    case msg: Photo => 
-      println("photo message: %s".format(msg))
+    case msg => 
+      println("processing message: %s".format(msg))
       pipe ! msg 
   }
 }

@@ -11,6 +11,9 @@ import org.scalatest.WordSpecLike
 import akka.actor.ActorSystem
 import akka.testkit.TestProbe
 
+import DirectoryTraversal._
+import java.io.File
+
 class RounterUsingConfigTest extends TestKit(
   ActorSystem("RouterUsingConfigTest"))
   with WordSpecLike with BeforeAndAfterAll {
@@ -31,6 +34,28 @@ class RounterUsingConfigTest extends TestKit(
       val check = Photo("123xyz" , 60)
       router ! Photo("123xyz" , 60)
       endProbe.expectMsg(timeout, check) 
+    }
+}
+ 
+ "The Router" must {
+    "illustrate processing directory tree" in {
+      val endProbe = TestProbe()
+      val router = system.actorOf(
+          FromConfig.props(Props(new GetLicense(endProbe.ref))),
+          "poolRouter2"
+          )
+          
+      val s = scan3(new File("C:/Windows")) {
+      t => 
+      // println("println file --> " + t)
+      router ! t
+      endProbe.expectMsg(timeout, t)       
+    }   
+          
+          
+//      val check = Photo("123xyz" , 60)
+//      router ! Photo("123xyz" , 60)
+//      endProbe.expectMsg(timeout, check) 
     }
 }
  

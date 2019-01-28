@@ -29,12 +29,12 @@ class HashRoutingTest
           props(Props(new SimpleGather(endProbe.ref))), name = "routerMapping")
 
       router ! GatherMessageNormalImpl("1", Seq("msg1"))
-      endProbe.expectNoMsg(100.millis)
+      endProbe.expectNoMessage(100.millis)
       router ! GatherMessageNormalImpl("1", Seq("msg2"))
       endProbe.expectMsg(GatherMessageNormalImpl("1",Seq("msg1","msg2")))
 
       router ! GatherMessageNormalImpl("10", Seq("msg1"))
-      endProbe.expectNoMsg(100.millis)
+      endProbe.expectNoMessage(100.millis)
       router ! GatherMessageNormalImpl("10", Seq("msg2"))
       endProbe.expectMsg(GatherMessageNormalImpl("10",Seq("msg1","msg2")))
       system.stop(router)
@@ -46,12 +46,12 @@ class HashRoutingTest
         props(Props(new SimpleGather(endProbe.ref))), name = "routerMessage")
 
       router ! GatherMessageWithHash("1", Seq("msg1"))
-      endProbe.expectNoMsg(100.millis)
+      endProbe.expectNoMessage(100.millis)
       router ! GatherMessageWithHash("1", Seq("msg2"))
       endProbe.expectMsg(GatherMessageNormalImpl("1",Seq("msg1","msg2")))
 
       router ! GatherMessageWithHash("10", Seq("msg1"))
-      endProbe.expectNoMsg(100.millis)
+      endProbe.expectNoMessage(100.millis)
       router ! GatherMessageWithHash("10", Seq("msg2"))
       endProbe.expectMsg(GatherMessageNormalImpl("10",Seq("msg1","msg2")))
       system.stop(router)
@@ -66,7 +66,7 @@ class HashRoutingTest
         message = GatherMessageNormalImpl("1", Seq("msg1")),
         hashKey = "someHash")
 
-      endProbe.expectNoMsg(100.millis)
+      endProbe.expectNoMessage(100.millis)
       router ! ConsistentHashableEnvelope(
         message = GatherMessageNormalImpl("1", Seq("msg2")),
         hashKey = "someHash")
@@ -75,7 +75,7 @@ class HashRoutingTest
       router ! ConsistentHashableEnvelope(
         message = GatherMessageNormalImpl("10", Seq("msg1")),
         hashKey = "10")
-      endProbe.expectNoMsg(100.millis)
+      endProbe.expectNoMessage(100.millis)
       router ! ConsistentHashableEnvelope(
         message = GatherMessageNormalImpl("10", Seq("msg2")),
         hashKey = "10")
@@ -89,9 +89,9 @@ class HashRoutingTest
         props(Props(new SimpleGather(endProbe.ref))), name = "routerMessage")
 
       router ! GatherMessageNormalImpl("1", Seq("msg1"))
-      endProbe.expectNoMsg(100.millis)
+      endProbe.expectNoMessage(100.millis)
       router ! GatherMessageNormalImpl("1", Seq("msg2"))
-      endProbe.expectNoMsg(1000.millis)
+      endProbe.expectNoMessage(1000.millis)
 
       system.stop(router)
     }

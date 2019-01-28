@@ -33,6 +33,8 @@
 		<module>chapter-conf-deploy</module>
 		<module>chapter-structure</module>
 		<module>chapter-routing</module>
+	    <module>chapter-channels</module>
+		
 	</modules>
 
 	<dependencies>

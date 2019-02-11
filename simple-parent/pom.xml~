@@ -34,6 +34,9 @@
 		<module>chapter-structure</module>
 		<module>chapter-routing</module>
 	    <module>chapter-channels</module>
+	    <module>chapter-state</module>
+	    <module>chapter-stream</module>
+
 		
 	</modules>
 
@@ -88,6 +91,12 @@
 			<scope>test</scope>
 		</dependency>
 		<!-- ############################## AKKA ########################################### -->
+<!-- https://mvnrepository.com/artifact/com.typesafe.akka/akka-agent -->
+<dependency>
+    <groupId>com.typesafe.akka</groupId>
+    <artifactId>akka-agent_2.12</artifactId>
+    <version>${akka.version}</version>
+</dependency>
 
 		<dependency>
 			<groupId>com.typesafe.akka</groupId>

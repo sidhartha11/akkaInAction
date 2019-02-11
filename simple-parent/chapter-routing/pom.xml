@@ -28,6 +28,12 @@
   <artifactId>akka-multi-node-testkit_2.12</artifactId>
   <version>${akka.version}</version>
 </dependency>
+<!-- https://mvnrepository.com/artifact/com.typesafe.akka/akka-cluster -->
+<dependency>
+    <groupId>com.typesafe.akka</groupId>
+    <artifactId>akka-cluster_2.12</artifactId>
+    <version>2.5.19</version>
+</dependency>
 
     </dependencies>
   <build>
